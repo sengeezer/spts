@@ -40,6 +40,7 @@ var log = function (s) {
     console.log(s);
 };
 log('ess');
+// Use any number of args
 var otherGetMax = function () {
     var nums = [];
     for (var _i = 0; _i < arguments.length; _i++) {
