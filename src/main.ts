@@ -122,3 +122,95 @@ let registeredUsers = new UserStack();
 registeredUsers.push(admin);
 registeredUsers.push(user);
 registeredUsers.push({name: 'other', email: 'other@eggsample.com'});
+
+// non-nullable types (no more null and undefined)
+
+// control flow based type analysis
+let guessMe: string | number;
+
+console.log(guessMe);
+
+if (typeof guessMe === 'string') {
+    console.log(guessMe);
+    guessMe = 5;
+} else {
+    console.log(guessMe);
+}
+
+// number then possible number -> number
+console.log(guessMe);
+
+// tagged union types
+interface Banana {
+    category: 'fruit',
+    price: number
+}
+
+interface Carrot {
+    category: 'vegetable',
+    price: number
+}
+
+interface Onion {
+    category: 'vegetable',
+    price: number
+}
+
+type Edible = Banana | Carrot | Onion;
+
+function logItem (edible: Edible) {
+    switch (edible.category){
+        case 'fruit':
+            // discriminant property
+            console.log('Banana', edible);
+            break;
+        case 'vegetable':
+            console.log('Carrot | Onion', edible);
+            break;
+        default:
+            console.log('neither');
+    }
+}
+
+// read-only and optional values in classes
+class Member {
+    readonly loginName: string;
+    alias?: string;
+    constructor(login: string, alias?: string) {
+        this.loginName = login;
+        if (alias){
+            this.alias = alias;
+        }
+    }
+}
+
+let member = new Member('admin', 'superuser');
+let member1 = new Member('user');
+
+// boolean, numeric and enum literal types
+type state = 'active' | 'deactivated' | 'ended';
+type falsy = false | 0 | '' | null | undefined;
+
+let x: falsy = 0; // 1 would be rejected
+
+const enum Direction {
+    UP = 1,
+    DOWN = 2,
+    LEFT = 3,
+    RIGHT = 4
+}
+
+type horizontalDirection = Direction.LEFT | Direction.RIGHT;
+
+let direction: horizontalDirection = Direction.RIGHT;
+
+// never type : never returns
+function crashTheBrowser(): never {
+    while(true){
+        //...
+    }
+}
+
+function throwError(message: string): never {
+    throw new Error(message);
+}
